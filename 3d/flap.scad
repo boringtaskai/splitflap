@@ -54,6 +54,7 @@ function get_letter_for_back(flap_index) = get_letter_for_front(flap_index + 1);
 
 module flap_2d(cut_tabs = true) {
     translate([0, -flap_pin_width/2, 0])
+    
     difference() {
         union() {
             square([flap_width, flap_height - flap_corner_radius]);
@@ -62,10 +63,12 @@ module flap_2d(cut_tabs = true) {
             hull() {
                 translate([flap_corner_radius, flap_height - flap_corner_radius])
                     circle(r=flap_corner_radius, $fn=40);
+                    
                 translate([flap_width - flap_corner_radius, flap_height - flap_corner_radius])
                     circle(r=flap_corner_radius, $fn=40);
             }
         }
+        
         // spool tabs
         if(cut_tabs) {
             translate([-eps, flap_pin_width])
@@ -132,6 +135,7 @@ module _draw_letter(letter, flap_gap) {
 
 module _flap_letter(letter, letter_color, flap_gap, front = true, bleed = 0, print_3d = false) {
     _apply_special_color(letter, letter_color) {
+    
         translate([0, 0, front ? (flap_thickness/2 + eps - (print_3d ? font_extrusion_3d : 0)) : (-flap_thickness/2 - eps)]) {
             linear_extrude(height=print_3d ? font_extrusion_3d : font_extrusion, center=print_3d ? false : true) {
                 intersection() {
@@ -210,7 +214,7 @@ module flap_with_letters(flap_color, letter_color, flap_index, flap_gap, flap=tr
 }
 
 // Example:
-i = 1;
+i = 27;
 gap = 5;
 
 flap_with_letters([1,0,0], [1,1,0], flap_index=i, flap_gap=gap, bleed=2);

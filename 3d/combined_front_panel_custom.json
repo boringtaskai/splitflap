@@ -1,0 +1,29 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "center_mode": "2",
+            "cols": "2",
+            "gap_x": "0",
+            "gap_y": "0",
+            "kerf_width": "0",
+            "render_etch": "false",
+            "render_full_modules_count": "4",
+            "render_index": "-1",
+            "rows": "1",
+            "tool_diameter": "0"
+        },
+        "New set 2": {
+            "center_mode": "2",
+            "cols": "2",
+            "gap_x": "0",
+            "gap_y": "0",
+            "kerf_width": "0",
+            "render_etch": "false",
+            "render_full_modules_count": "4",
+            "render_index": "-1",
+            "rows": "1",
+            "tool_diameter": "0"
+        }
+    }
+}

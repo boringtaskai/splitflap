@@ -44,7 +44,7 @@ CENTER_MODES = {
 }
 
 def render(extra_variables, output_directory):
-    renderer = Renderer(os.path.join(source_parts_dir, 'combined_front_panel.scad'), output_directory, extra_variables)
+    renderer = Renderer(os.path.join(source_parts_dir, 'combined_front_panel_custom.scad'), output_directory, extra_variables)
     renderer.clean()
     svg_output, _ = renderer.render_svgs(panelize_quantity = 1)
     logging.info('\n\n\nDone rendering to SVG: ' + svg_output)

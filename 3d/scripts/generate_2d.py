@@ -110,7 +110,7 @@ if __name__ == '__main__':
 
     print('Variables:\n' + json.dumps(extra_variables, indent=4))
 
-    renderer = Renderer(os.path.join(source_parts_dir, 'splitflap.scad'), laser_parts_directory, extra_variables)
+    renderer = Renderer(os.path.join(source_parts_dir, 'splitflap_custom.scad'), laser_parts_directory, extra_variables)
     renderer.clean()
     svg_output, output_data = renderer.render_svgs(panelize_quantity=args.panelize)
     logging.debug(f'Output data: {output_data}')

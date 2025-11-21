@@ -23,9 +23,10 @@ import openscad
 from svg_processor import SvgProcessor
 
 class Renderer(object):
-    def __init__(self, input_file, output_folder, extra_variables=None):
+    def __init__(self, input_file, output_folder, color_inverted, extra_variables=None):
         self.input_file = input_file
         self.output_folder = output_folder
+        self.color_inverted = color_inverted
         if extra_variables is None:
             extra_variables = {}
         self.extra_variables = extra_variables
@@ -93,7 +94,7 @@ class Renderer(object):
                 else:
                     raise
 
-            processor = SvgProcessor(output_file)
+            processor = SvgProcessor(output_file, self.color_inverted)
             if style == 'cut':
                 processor.apply_laser_cut_style()
             elif style == 'etch':
@@ -107,11 +108,14 @@ class Renderer(object):
         assert panelize_quantity == 1 or panelize_quantity % 2 == 0, 'Panelize quantity must be 1 or an even number'
         outputs = self._get_extracted_outputs()
         num_components = int(outputs['num_components'])
+
+        #num_components here is (from projection_renderer.scad), there are 3, flip_flap outer, text, and alignment marking
         logging.info('Found %d components to render', num_components)
         svg_output = None
 
         horizontal_range = 1 if panelize_quantity == 1 else 2
         vertical_range = (panelize_quantity + 1) // 2
+        logging.info('Horizontal range:%s, Vertical range: %s', horizontal_range, vertical_range)
         for panel_horizontal in range(0, horizontal_range):
             for panel_vertical in range(0, vertical_range):
                 for i in range(num_components):
