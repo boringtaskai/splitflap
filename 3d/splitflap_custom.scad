@@ -17,7 +17,7 @@
 use<28byj-48.scad>;
 use<assert.scad>;
 use<color_util.scad>;
-use<flap.scad>;
+use<flap_custom.scad>;
 use<flap_characters.scad>;
 use<label.scad>;
 use<pcb.scad>;

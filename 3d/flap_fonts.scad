@@ -168,6 +168,20 @@ _font_settings = [
         // "color_height", 0.455,
         // "color_offset_y", 1.4,
     ],
+    
+    "NotoEmoji", [
+        "font", "Noto Emoji",
+        "height", 0.6,
+        "width", 1,
+        "offset_x", 0,
+        "offset_y", 0,
+        "overrides", [
+            // ["@", 0, 4, 0.65, 0.8],
+            // ["Q", 0, 4, 0.6],
+        ],
+        // "color_height", 0.455,
+        // "color_offset_y", 1.4,
+    ],
 ];
 
 // Private functions

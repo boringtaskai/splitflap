@@ -88,13 +88,13 @@ class SvgProcessor(object):
                 if (self.is_color_inverted):
                     SvgProcessor._apply_attributes(path, {
                         'fill': '#000000',
-                        'stroke': '#0000ff',
+                        'stroke': '#000000',
                         'stroke-width': '0.1',
                     })
                 else:
                     SvgProcessor._apply_attributes(path, {
-                        'fill': 'none',
-                        'stroke': '#0000ff',
+                        'fill': '#ffffff',
+                        'stroke': '#ffffff',
                         'stroke-width': '0.1',
                     })
 

@@ -15,7 +15,7 @@
 */
 
 include<flap_dimensions.scad>;
-use<flap.scad>;
+use<flap_custom.scad>;
 use<flap_characters.scad>;
 use<projection_renderer.scad>;
 use<splitflap_custom.scad>;
