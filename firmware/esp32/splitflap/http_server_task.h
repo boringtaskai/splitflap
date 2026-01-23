@@ -15,9 +15,11 @@
 */
 #pragma once
 
+#include <SPIFFS.h>
 #include <Arduino.h>
 #include <WiFi.h>
 #include <WebServer.h>
+
 
 #include "../core/logger.h"
 #include "../core/splitflap_task.h"

@@ -15,7 +15,7 @@
 */
 #pragma once
 
-#include <FFat.h>
+#include <SPIFFS.h>
 #include <PacketSerial.h>
 
 #include "../proto_gen/splitflap.pb.h"
@@ -49,24 +49,24 @@ class Configuration {
 class FatGuard {
     public:
         FatGuard(Logger* logger) : logger_(logger) {
-            if (!FFat.begin(true)) {
+            if (!SPIFFS.begin(true)) {
                 if (logger_ != nullptr) {
-                    logger_->log("Failed to mount FFat");
+                    logger_->log("Failed to mount SPIFFS");
                 }
                 return;
             }
             if (logger_ != nullptr) {
-                logger_->log("Mounted FFat");
+                logger_->log("Mounted SPIFFS");
             }
             mounted_ = true;
         }
         ~FatGuard() {
-            if (mounted_) {
-                FFat.end();
-                if (logger_ != nullptr) {
-                    logger_->log("Unmounted FFat");
-                }
-            }
+            // if (mounted_) {
+            //     SPIFFS.end();
+            //     if (logger_ != nullptr) {
+            //         logger_->log("Unmounted FFat");
+            //     }
+            // }
         }
         FatGuard(FatGuard const&)=delete;
         FatGuard& operator=(FatGuard const&)=delete;

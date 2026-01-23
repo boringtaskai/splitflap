@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#include <FFat.h>
+#include <SPIFFS.h>
 
 #include "pb_decode.h"
 #include "pb_encode.h"
@@ -42,7 +42,7 @@ bool Configuration::loadFromDisk() {
         return false;
     }
 
-    File f = FFat.open(CONFIG_PATH);
+    File f = SPIFFS.open(CONFIG_PATH);
     if (!f) {
         log("Failed to read config file");
         return false;
@@ -124,7 +124,7 @@ bool Configuration::saveToDisk() {
     if (!fatGuard.mounted_) {
         return false;
     }
-    File f = FFat.open(CONFIG_PATH, FILE_WRITE);
+    File f = SPIFFS.open(CONFIG_PATH, FILE_WRITE);
     if (!f) {
         log("Failed to open config file");
         return false;

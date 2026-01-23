@@ -15,13 +15,16 @@
 */
 #if HTTP_SERVER
 
+#include <SPIFFS.h>
+
 #include "http_server_task.h"
-
 #include <json11.hpp>
-
+#include <esp_wifi.h>
 #include "secrets.h"
 
+
 using namespace json11;
+
 
 namespace {
     constexpr uint16_t kHttpServerPort = 80;
@@ -68,6 +71,14 @@ void HTTPServerTask::connectWifi() {
         return;
     }
 
+    WiFi.mode(WIFI_STA);
+
+    WiFi.persistent(false);
+
+    WiFi.disconnect(true, true);
+    delay(500);
+
+    esp_wifi_set_protocol(WIFI_IF_STA, WIFI_PROTOCOL_11B);
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
     // Disable WiFi sleep as it causes glitches on pin 39; see https://github.com/espressif/arduino-esp32/issues/4903#issuecomment-793187707
@@ -80,6 +91,7 @@ void HTTPServerTask::connectWifi() {
     display_task_.setMessage(1, String(buf));
     while (WiFi.status() != WL_CONNECTED) {
         delay(1000);
+        logger_.log(".");
     }
 
     snprintf(buf, sizeof(buf), "Wifi IP: %s", WiFi.localIP().toString().c_str());
@@ -114,12 +126,39 @@ void HTTPServerTask::startServer() {
 }
 
 void HTTPServerTask::handleRoot() {
-    Json response = Json::object {
-        {"status", "ok"},
-        {"message", "POST JSON to /text to update the display"},
-        {"max_length", NUM_MODULES}
-    };
-    sendJson(200, String(response.dump().c_str()));
+    // Json response = Json::object {
+    //     {"status", "ok"},
+    //     {"message", "POST JSON to /text to update the display"},
+    //     {"max_length", NUM_MODULES}
+    // };
+    // sendJson(200, String(response.dump().c_str()));
+
+    // File root = LITTLEFS.open("/");
+    // if(!root){
+    //     logger_.log("- failed to open directory");
+    // }
+    // File nextFile = root.openNextFile();
+    // while(nextFile){
+    //     logger_.log("  FILE: ");
+    //     logger_.log(nextFile.name());
+    //     nextFile = root.openNextFile();
+    // }
+    // logger_.log("-----------------------------");
+
+    if (!SPIFFS.exists("/index.html")) {
+        logger_.log("index.html file does not exist.");
+        sendJson(500, "{\"error\":\"index.html file does not exist.\"}");
+        return;
+    }
+
+    File file = SPIFFS.open("/index.html", FILE_READ);
+    if (!file) {
+        sendJson(500, "{\"error\":\"fs_error\"}");
+        return;
+    }
+    // Stream file langsung ke client
+    server_.streamFile(file, "text/html");
+    file.close();
 }
 
 void HTTPServerTask::handleTextPost() {
@@ -279,10 +318,18 @@ void HTTPServerTask::updateWifiStatusDisplay() {
 }
 
 void HTTPServerTask::run() {
+  
+    connectWifi();
+
     display_task_.setMessage(0, "");
     display_task_.setMessage(1, "HTTP: starting...");
 
-    connectWifi();
+    if (!SPIFFS.begin(true)) {
+        logger_.log("SPIFFS Mount Failed in HTTP Task");
+        // Kita bisa return atau lanjut dengan risiko HTML tidak tampil
+    } else {
+        logger_.log("SPIFFS Ready");
+    }
 
     if (WiFi.status() == WL_CONNECTED) {
         startServer();
@@ -296,6 +343,8 @@ void HTTPServerTask::run() {
         if (server_running_) {
             server_.handleClient();
         }
+
+        delay(10);
     }
 }
 
